@@ -75,7 +75,11 @@ export function activate(context: vscode.ExtensionContext) {
       implements vscode.TreeDataProvider<vscode.TreeItem>
     {
       getChildren(): vscode.ProviderResult<vscode.TreeItem[]> {
-        return [];
+        const placeholderItem = new vscode.TreeItem(
+          "No component file discovered",
+          vscode.TreeItemCollapsibleState.None
+        );
+        return [placeholderItem];
       }
       getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
         return element;
