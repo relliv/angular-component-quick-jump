@@ -13,23 +13,75 @@ export function activate(context: vscode.ExtensionContext) {
     'Congratulations, your extension "angular-quick-jump-in-component-folder" is now active!'
   );
 
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  const disposable = vscode.commands.registerCommand(
-    "angular-quick-jump-in-component-folder.helloWorld",
-    () => {
-      // The code you place here will be executed every time your command is executed
-      // Display a message box to the user
-      vscode.window.showInformationMessage(
-        "Hello World from Angular Quick Jump in ÇÇÇÇÇÇ Folder!"
-      );
+  function updateFileButtons() {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
     }
-  );
 
-  context.subscriptions.push(disposable);
+    const document = editor.document;
+    const fileName = path.basename(document.fileName);
+    const dirName = path.dirname(document.fileName);
 
-  vscode.window.showInformationMessage("xxxxx");
+    const regex = /([a-zA-Z0-9_-]+)\.component\.(\.*)/;
+    const match = fileName.match(regex);
+    if (!match) {
+      vscode.window.showInformationMessage("not matched");
+      clearTreeView();
+      return;
+    }
+
+    vscode.window.showInformationMessage("this is ng component file");
+
+    const [_, baseName] = match;
+    const pattern = new RegExp(`^${baseName}\.component\.(\.*)$`);
+
+    fs.readdir(dirName, (err, files) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      console.log(`Files in directory: ${files.join(", ")}`);
+      console.log(`Regex pattern: ${pattern}`);
+
+      const matchingFiles = files.filter((file) => {
+        const isMatch = pattern.test(file);
+        console.log(`Testing file: ${file}, Match: ${isMatch}`);
+        return isMatch;
+      });
+
+      if (matchingFiles.length === 0) {
+        vscode.window.showInformationMessage("No matching files found.");
+        clearTreeView();
+      } else {
+        vscode.window.showInformationMessage(
+          `Matching files: ${matchingFiles.join(", ")}`
+        );
+        createAccordionMenu(matchingFiles, dirName);
+      }
+    });
+  }
+
+  function clearTreeView() {
+    const viewId = "componentFilesAccordion";
+    const treeDataProvider = new (class
+      implements vscode.TreeDataProvider<vscode.TreeItem>
+    {
+      getChildren(): vscode.ProviderResult<vscode.TreeItem[]> {
+        const placeholderItem = new vscode.TreeItem(
+          "No component file discovered",
+          vscode.TreeItemCollapsibleState.None
+        );
+        return [placeholderItem];
+      }
+      getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
+        return element;
+      }
+    })();
+
+    vscode.window.registerTreeDataProvider(viewId, treeDataProvider);
+  }
 
   function createAccordionMenu(matchingFiles: string[], dirName: string) {
     const viewId = "componentFilesAccordion";
@@ -39,7 +91,6 @@ export function activate(context: vscode.ExtensionContext) {
       getChildren(
         element?: vscode.TreeItem
       ): vscode.ProviderResult<vscode.TreeItem[]> {
-        console.log(`getChildren: ${element}`);
         if (!element) {
           return matchingFiles.map((file) => {
             const treeItem = new vscode.TreeItem(
@@ -66,76 +117,6 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.createTreeView(viewId, {
       treeDataProvider,
       showCollapseAll: true,
-    });
-  }
-
-  function clearTreeView() {
-    const viewId = "componentFilesAccordion";
-    const treeDataProvider = new (class
-      implements vscode.TreeDataProvider<vscode.TreeItem>
-    {
-      getChildren(): vscode.ProviderResult<vscode.TreeItem[]> {
-        const placeholderItem = new vscode.TreeItem(
-          "No component file discovered",
-          vscode.TreeItemCollapsibleState.None
-        );
-        return [placeholderItem];
-      }
-      getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
-        return element;
-      }
-    })();
-
-    vscode.window.registerTreeDataProvider(viewId, treeDataProvider);
-  }
-
-  function updateFileButtons() {
-    const editor = vscode.window.activeTextEditor;
-    if (!editor) {
-      return;
-    }
-
-    const document = editor.document;
-    const fileName = path.basename(document.fileName);
-    const dirName = path.dirname(document.fileName);
-
-    const regex = /([a-zA-Z0-9_-]+)\.component\.([\w_-]+)/;
-    const match = fileName.match(regex);
-    if (!match) {
-      vscode.window.showInformationMessage("not matched");
-      clearTreeView();
-      return;
-    }
-
-    vscode.window.showInformationMessage("this is ng component file");
-
-    const [_, baseName] = match;
-    const pattern = new RegExp(`^${baseName}\\.component\\.(\.*)$`);
-
-    fs.readdir(dirName, (err, files) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-
-      console.log(`Files in directory: ${files.join(", ")}`);
-      console.log(`Regex pattern: ${pattern}`);
-
-      const matchingFiles = files.filter((file) => {
-        const isMatch = pattern.test(file);
-        console.log(`Testing file: ${file}, Match: ${isMatch}`);
-        return isMatch;
-      });
-
-      if (matchingFiles.length === 0) {
-        vscode.window.showInformationMessage("No matching files found.");
-        clearTreeView();
-      } else {
-        vscode.window.showInformationMessage(
-          `Matching files: ${matchingFiles.join(", ")}`
-        );
-        createAccordionMenu(matchingFiles, dirName);
-      }
     });
   }
 

@@ -9,15 +9,12 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished",
+    "onDidOpenTextDocument"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "angular-quick-jump-in-component-folder.helloWorld",
-        "title": "Hello World"
-      }
-    ],
     "viewsContainers": {
       "explorer": [
         {
