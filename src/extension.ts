@@ -95,6 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
               title: "Open File",
               arguments: [vscode.Uri.file(path.join(dirName, file))],
             };
+            treeItem.iconPath = vscode.ThemeIcon.File;
             return treeItem;
           });
         }
