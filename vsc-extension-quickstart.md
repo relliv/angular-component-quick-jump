@@ -13,7 +13,6 @@
 
 * install the recommended extensions (amodio.tsl-problem-matcher, ms-vscode.extension-test-runner, and dbaeumer.vscode-eslint)
 
-
 ## Get up and running straight away
 
 * Press `F5` to open a new window with your extension loaded.
@@ -25,7 +24,6 @@
 
 * You can relaunch the extension from the debug toolbar after changing code in `src/extension.ts`.
 * You can also reload (`Ctrl+R` or `Cmd+R` on Mac) the VS Code window with your extension to load your changes.
-
 
 ## Explore the API
 
@@ -46,3 +44,13 @@
 * Reduce the extension size and improve the startup time by [bundling your extension](https://code.visualstudio.com/api/working-with-extensions/bundling-extension).
 * [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) on the VS Code extension marketplace.
 * Automate builds by setting up [Continuous Integration](https://code.visualstudio.com/api/working-with-extensions/continuous-integration).
+
+## Create VSIX package
+
+First install vsce globally by running `npm i vsce -g`.
+
+Then run `vsce package` in the root of your project.
+
+> vsce is not working with PNPM, you need to use NPM.
+
+Then you can install the generated `.vsix` file by running `code --install-extension angular-quick-jump-in-component-folder-x.x.x.vsix` or you can load manually with `F1` > `Extensions: Install from VSIX...` command.

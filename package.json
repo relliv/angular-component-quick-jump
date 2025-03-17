@@ -2,7 +2,7 @@
   "name": "angular-quick-jump-in-component-folder",
   "displayName": "Angular Quick Jump in Component Folder",
   "description": "Jump any component file in editor with single click",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.98.0"
   },
@@ -13,6 +13,10 @@
     "onStartupFinished",
     "onDidOpenTextDocument"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/relliv/angular-component-quick-jump.git"
+  },
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
