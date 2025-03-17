@@ -17,7 +17,24 @@
         "command": "angular-quick-jump-in-component-folder.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "explorer": [
+        {
+          "id": "componentFilesAccordion",
+          "title": "Component Files",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "componentFilesAccordion": [
+        {
+          "id": "componentFilesAccordion",
+          "name": "Component Files"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run package",
