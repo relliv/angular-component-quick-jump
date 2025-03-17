@@ -54,3 +54,5 @@ Then run `vsce package` in the root of your project.
 > vsce is not working with PNPM, you need to use NPM.
 
 Then you can install the generated `.vsix` file by running `code --install-extension angular-quick-jump-in-component-folder-x.x.x.vsix` or you can load manually with `F1` > `Extensions: Install from VSIX...` command.
+
+> This solutin is working only with VS Code. Other VS Code forks like VSCodium, Cursor, Windsurf etc. are may not supported.
