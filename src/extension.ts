@@ -89,7 +89,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage("this is ng component file");
 
     const [_, baseName, ext] = match;
-    const pattern = new RegExp(`^${baseName}\\.component\\.[\\w_-]+$`);
+    const pattern = new RegExp(`^${baseName}\\.component\\.(\.*)$`);
 
     fs.readdir(dirName, (err, files) => {
       if (err) {
