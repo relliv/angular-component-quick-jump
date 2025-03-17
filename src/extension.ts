@@ -69,6 +69,22 @@ export function activate(context: vscode.ExtensionContext) {
     });
   }
 
+  function clearTreeView() {
+    const viewId = "componentFilesAccordion";
+    const treeDataProvider = new (class
+      implements vscode.TreeDataProvider<vscode.TreeItem>
+    {
+      getChildren(): vscode.ProviderResult<vscode.TreeItem[]> {
+        return [];
+      }
+      getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
+        return element;
+      }
+    })();
+
+    vscode.window.registerTreeDataProvider(viewId, treeDataProvider);
+  }
+
   function updateFileButtons() {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -83,12 +99,13 @@ export function activate(context: vscode.ExtensionContext) {
     const match = fileName.match(regex);
     if (!match) {
       vscode.window.showInformationMessage("not matched");
+      clearTreeView();
       return;
     }
 
     vscode.window.showInformationMessage("this is ng component file");
 
-    const [_, baseName, ext] = match;
+    const [_, baseName] = match;
     const pattern = new RegExp(`^${baseName}\\.component\\.(\.*)$`);
 
     fs.readdir(dirName, (err, files) => {
@@ -108,13 +125,13 @@ export function activate(context: vscode.ExtensionContext) {
 
       if (matchingFiles.length === 0) {
         vscode.window.showInformationMessage("No matching files found.");
+        clearTreeView();
       } else {
         vscode.window.showInformationMessage(
           `Matching files: ${matchingFiles.join(", ")}`
         );
+        createAccordionMenu(matchingFiles, dirName);
       }
-
-      createAccordionMenu(matchingFiles, dirName);
     });
   }
 
